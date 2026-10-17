@@ -1,0 +1,21 @@
+# Netlify deployment for the frontend (static SPA).
+# Set VITE_API_URL in Site settings -> Environment variables to your deployed
+# backend origin, e.g. https://pulsepoll-api.onrender.com
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA fallback: serve index.html for every unknown route (/p/:slug, etc.)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

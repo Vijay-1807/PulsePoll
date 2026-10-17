@@ -1,0 +1,35 @@
+# Render Blueprint — deploy the PulsePoll backend + Redis in one click.
+# https://render.com/docs/blueprint-spec
+#
+# Before deploying, create a free MongoDB Atlas cluster and set the
+# `MONGO_URI` and `CORS_ORIGINS` environment variables on the `pulsepoll-api`
+# service (Dashboard -> Environment). JWT_SECRET is generated automatically.
+services:
+  - type: web
+    name: pulsepoll-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB
+        value: pulsepoll
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: pulsepoll-redis
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false
+
+  - type: keyvalue
+    name: pulsepoll-redis
+    plan: free
+    maxmemoryPolicy: noeviction

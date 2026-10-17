@@ -1,0 +1,27 @@
+# Build artifacts
+backend/pulsepoll-api.exe
+backend/pulsepoll-api
+backend/server
+backend/*.exe
+frontend/dist/
+frontend/node_modules/
+
+# Environment files (never commit secrets)
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env.local
+frontend/.env.development.local
+
+# Test artifacts
+frontend/test-results/
+frontend/playwright-report/
+frontend/.playwright/
+
+# Editor / OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
