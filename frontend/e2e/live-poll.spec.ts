@@ -93,7 +93,7 @@ test.describe('PulsePoll live flow', () => {
       // Replaying the same ballot through the API is rejected too — the UI
       // hiding the button is not the security boundary.
       const slug = pollUrl.split('/p/')[1]
-      const apiBase = process.env.API_URL ?? 'http://localhost:8080'
+      const apiBase = process.env.API_URL ?? process.env.PW_BASE_URL ?? 'http://localhost:8080'
       const res = await voterPage.request.post(`${apiBase}/api/polls/slug/${slug}/vote`, {
         data: { optionIds: ['whatever'], voterId: 'x' },
       })
@@ -114,7 +114,7 @@ test.describe('PulsePoll live flow', () => {
     await expect(page).toHaveURL(/login/)
 
     // And the API refuses anonymous writes outright.
-    const apiBase = process.env.API_URL ?? 'http://localhost:8080'
+    const apiBase = process.env.API_URL ?? process.env.PW_BASE_URL ?? 'http://localhost:8080'
     const res = await request.post(`${apiBase}/api/polls`, {
       data: { question: 'Sneaky?', options: ['a', 'b'] },
     })
@@ -128,7 +128,7 @@ test.describe('PulsePoll live flow', () => {
     const token = await page.evaluate(() => localStorage.getItem('pp_token'))
     expect(token).toBeTruthy()
 
-    const apiBase = process.env.API_URL ?? 'http://localhost:8080'
+    const apiBase = process.env.API_URL ?? process.env.PW_BASE_URL ?? 'http://localhost:8080'
     const authed = { Authorization: `Bearer ${token}` }
 
     // Too few options after trimming.
@@ -182,7 +182,7 @@ test.describe('PulsePoll live flow', () => {
       await expect(viewerPage.getByText('vote recorded', { exact: false })).toHaveCount(0)
 
       const slug = pollUrl.split('/p/')[1]
-      const apiBase = process.env.API_URL ?? 'http://localhost:8080'
+      const apiBase = process.env.API_URL ?? process.env.PW_BASE_URL ?? 'http://localhost:8080'
       const token = await creatorPage.evaluate(() => localStorage.getItem('pp_token'))
       const list = await creatorPage.request.get(`${apiBase}/api/polls`, { headers: { Authorization: `Bearer ${token}` } })
       const polls = (await list.json()).polls as Array<{ id: string; slug: string }>

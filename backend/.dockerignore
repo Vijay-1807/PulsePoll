@@ -1,0 +1,4 @@
+pulsepoll-api.exe
+pulsepoll-api
+*.log
+.env
