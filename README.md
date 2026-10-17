@@ -21,8 +21,7 @@ multi-select, optional auto-close timer), shares the link or QR code, and every 
 the audience, the creator's dashboard, a projector in the room — updates the moment a vote
 lands. No refreshes, no polling the API, no manual tallying.
 
-**Live demo:** _see the submission email — link goes here_ (`https://pulsepoll.vercel.app` or Netlify)
-**Walkthrough video:** _see the submission email_
+**Live demo:** _deployed on Vercel + Render — link will be added here on completion_
 
 ## How the real-time pipeline works
 
@@ -118,7 +117,8 @@ every counter from the durable vote log, and a reconciler re-verifies every 5 mi
 docker-compose.yml         dev: Mongo + Redis
 docker-compose.prod.yml    full stack on one host (nginx proxies /api + WS)
 render.yaml                one-click backend + Redis blueprint
-netlify.toml               frontend static deploy with SPA fallback
+netlify.toml               alternative frontend host (static + SPA fallback)
+frontend/vercel.json       SPA rewrites for Vercel deploys
 ```
 
 ## Running locally
@@ -185,13 +185,14 @@ and that closing a poll flips already-open viewer tabs over the socket.
 
 ## Deployment
 
-**Recommended free stack** (Render + Netlify + MongoDB Atlas) — full walkthrough in the submission video:
+**Recommended free stack** (Render + Vercel + MongoDB Atlas):
 
-1. **MongoDB Atlas** free cluster → copy the connection string.
+1. **MongoDB Atlas** free cluster → Database Access: create a user; Network Access: allow
+   `0.0.0.0/0` (Render's free tier has no static egress IPs); copy the `mongodb+srv://` URI.
 2. **Render**: New → Blueprint → point at this repo. `render.yaml` provisions the API
-   (Docker) and Redis (Key Value); set `MONGO_URI` and `CORS_ORIGINS` when prompted.
-3. **Netlify**: New site → this repo (`netlify.toml` handles build + SPA routing); set
-   `VITE_API_URL` to the Render URL and deploy.
+   (Docker) and Redis (Key Value); paste `MONGO_URI` and set `CORS_ORIGINS` when prompted.
+3. **Vercel**: Add New → Project → import this repo, set **Root Directory** to `frontend`,
+   add `VITE_API_URL` = your Render service URL (baked in at build time), deploy.
 
 **Single host:** `docker compose -f docker-compose.prod.yml up -d --build` — the frontend
 nginx container proxies `/api` (REST + WebSocket upgrade) to the backend, so everything

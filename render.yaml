@@ -32,4 +32,5 @@ services:
   - type: keyvalue
     name: pulsepoll-redis
     plan: free
+    ipAllowList: [] # internal connections only (backend service)
     maxmemoryPolicy: noeviction
