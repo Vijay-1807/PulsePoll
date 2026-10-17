@@ -1,19 +1,19 @@
-export function LiveDot({ label = 'LIVE' }: { label?: string }) {
+export function LiveDot({ label = 'live' }: { label?: string }) {
   return (
-    <span className="chip border-emerald-400/25 bg-emerald-400/10 text-emerald-300">
-      <span className="relative flex h-1.5 w-1.5">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+    <span className="chip border-moss-200 bg-moss-50 text-moss-700">
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-moss-500 opacity-60" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-moss-600" />
       </span>
       {label}
     </span>
   )
 }
 
-export function ClosedDot({ label = 'CLOSED' }: { label?: string }) {
+export function ClosedDot({ label = 'closed' }: { label?: string }) {
   return (
-    <span className="chip border-slate-500/25 bg-slate-500/10 text-slate-400">
-      <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />
+    <span className="chip border-paper-400 bg-paper-200 text-ink-500">
+      <span className="h-2 w-2 rounded-full bg-ink-400" />
       {label}
     </span>
   )

@@ -25,13 +25,22 @@ import { useAuth } from '../lib/auth'
 import { compact } from '../lib/format'
 import type { PollSummary } from '../types'
 
-function StatCard({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
+type Tone = 'clay' | 'cornflower' | 'moss' | 'gold'
+
+const TONES: Record<Tone, string> = {
+  clay: 'border-clay-200 bg-clay-100 text-clay-700',
+  cornflower: 'border-cornflower-200 bg-cornflower-100 text-cornflower-700',
+  moss: 'border-moss-200 bg-moss-100 text-moss-700',
+  gold: 'border-gold-200 bg-gold-100 text-gold-700',
+}
+
+function StatCard({ icon, label, value, tone = 'clay' }: { icon: ReactNode; label: string; value: string; tone?: Tone }) {
   return (
     <div className="card flex items-center gap-3.5 px-5 py-4">
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/10 text-brand-300">{icon}</span>
+      <span className={`flex h-10 w-10 items-center justify-center rounded-xl border ${TONES[tone]}`}>{icon}</span>
       <div>
-        <div className="text-xl font-bold tabular-nums text-white">{value}</div>
-        <div className="text-xs text-slate-500">{label}</div>
+        <div className="font-display text-xl font-semibold tabular-nums text-ink-950">{value}</div>
+        <div className="text-xs text-ink-400">{label}</div>
       </div>
     </div>
   )
@@ -108,18 +117,18 @@ function PollCard({
   }
 
   return (
-    <div className="card flex flex-col p-5 transition hover:border-white/[0.13]">
+    <div className="card flex flex-col p-5 transition hover:shadow-lift">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             {closed ? <ClosedDot /> : <LiveDot />}
-            <span className="font-mono text-[11px] text-slate-500">/p/{poll.slug}</span>
+            <span className="font-mono text-[11px] text-ink-400">/p/{poll.slug}</span>
           </div>
-          <h3 className="mt-2.5 line-clamp-2 text-[15px] font-bold leading-snug text-white">{poll.question}</h3>
+          <h3 className="mt-2.5 line-clamp-2 text-[15px] font-bold leading-snug text-ink-950">{poll.question}</h3>
         </div>
-        <span className="shrink-0 rounded-lg bg-white/[0.05] px-2.5 py-1.5 text-center">
-          <span className="block text-lg font-extrabold tabular-nums text-white">{compact(poll.totalVotes)}</span>
-          <span className="block text-[10px] uppercase tracking-wider text-slate-500">votes</span>
+        <span className="shrink-0 rounded-lg border border-paper-300 bg-paper-50 px-2.5 py-1.5 text-center">
+          <span className="block font-display text-lg font-semibold tabular-nums text-ink-950">{compact(poll.totalVotes)}</span>
+          <span className="block text-[10px] uppercase tracking-wider text-ink-400">votes</span>
         </span>
       </div>
 
@@ -128,16 +137,14 @@ function PollCard({
           const pct = poll.totalVotes > 0 ? ((poll.counts[o.id] ?? 0) / poll.totalVotes) * 100 : 0
           return (
             <div key={o.id}>
-              <div className="flex justify-between text-[12px] text-slate-400">
+              <div className="flex justify-between text-[12px] text-ink-500">
                 <span className="truncate">{o.text}</span>
                 <span className="tabular-nums">{poll.counts[o.id] ?? 0}</span>
               </div>
-              <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+              <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-paper-200">
                 <div
                   className={`h-full rounded-full transition-[width] duration-700 ${
-                    o.id === top?.id && poll.totalVotes > 0
-                      ? 'bg-gradient-to-r from-brand-500 to-fuchsia-500'
-                      : 'bg-slate-600'
+                    o.id === top?.id && poll.totalVotes > 0 ? 'bg-clay-600' : 'bg-ink-200'
                   }`}
                   style={{ width: `${pct}%` }}
                 />
@@ -147,7 +154,7 @@ function PollCard({
         })}
       </div>
 
-      <div className="mt-4 flex items-center gap-3 text-[12px] text-slate-500">
+      <div className="mt-4 flex items-center gap-3 text-[12px] text-ink-400">
         <span className="flex items-center gap-1">
           <Eye className="h-3.5 w-3.5" /> {poll.viewers} watching
         </span>
@@ -155,7 +162,7 @@ function PollCard({
         <span>{new Date(poll.createdAt).toLocaleDateString()}</span>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-white/[0.06] pt-4">
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-paper-200 pt-4">
         <Link to={`/p/${poll.slug}`} className="btn-ghost !px-3 !py-2 text-xs">
           <BarChart3 className="h-3.5 w-3.5" /> Open
         </Link>
@@ -184,7 +191,7 @@ function PollCard({
         ) : (
           <button
             onClick={() => setConfirmDelete(true)}
-            className="btn-ghost ml-auto !px-3 !py-2 text-xs hover:!border-rose-500/30 hover:!text-rose-300"
+            className="btn-ghost ml-auto !px-3 !py-2 text-xs hover:!border-brick-300 hover:!text-brick-600"
             aria-label="Delete poll"
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -238,17 +245,25 @@ export function Dashboard() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-20 border-b border-white/[0.06] bg-ink-950/80 backdrop-blur-md">
+      <header className="sticky top-0 z-20 border-b border-paper-300 bg-paper-50/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Logo />
           <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-slate-400 sm:block">
-              Hey, <span className="font-semibold text-slate-200">{user?.name}</span>
+            <span className="hidden text-sm text-ink-500 sm:block">
+              Hey, <span className="font-semibold text-ink-900">{user?.name}</span>
             </span>
             <Link to="/polls/new" className="btn-primary !py-2 text-sm">
               <Plus className="h-4 w-4" /> New poll
             </Link>
-            <button onClick={() => { logout(); navigate('/') }} className="btn-ghost !px-3 !py-2" aria-label="Log out" title="Log out">
+            <button
+              onClick={() => {
+                logout()
+                navigate('/')
+              }}
+              className="btn-ghost !px-3 !py-2"
+              aria-label="Log out"
+              title="Log out"
+            >
               <LogOut className="h-4 w-4" />
             </button>
           </div>
@@ -258,8 +273,10 @@ export function Dashboard() {
       <main className="mx-auto max-w-6xl px-6 py-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-extrabold tracking-tight text-white">Your polls</h1>
-            <p className="mt-1 text-sm text-slate-400">Totals below refresh every 10 seconds — open a poll to see votes land live.</p>
+            <h1 className="heading text-2xl">Your polls</h1>
+            <p className="mt-1 text-sm text-ink-500">
+              Totals below refresh every 10 seconds — open a poll to see votes land live.
+            </p>
           </div>
           <button onClick={() => void load()} className="btn-ghost !px-3 !py-2 text-xs" disabled={refreshing}>
             <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
@@ -267,10 +284,10 @@ export function Dashboard() {
         </div>
 
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <StatCard icon={<BarChart3 className="h-5 w-5" />} label="Polls created" value={String(stats.total)} />
-          <StatCard icon={<Zap className="h-5 w-5" />} label="Active polls" value={String(stats.active)} />
-          <StatCard icon={<Users className="h-5 w-5" />} label="Total votes" value={compact(stats.votes)} />
-          <StatCard icon={<Eye className="h-5 w-5" />} label="Watching right now" value={String(stats.viewers)} />
+          <StatCard icon={<BarChart3 className="h-5 w-5" />} label="Polls created" value={String(stats.total)} tone="clay" />
+          <StatCard icon={<Zap className="h-5 w-5" />} label="Active polls" value={String(stats.active)} tone="gold" />
+          <StatCard icon={<Users className="h-5 w-5" />} label="Total votes" value={compact(stats.votes)} tone="cornflower" />
+          <StatCard icon={<Eye className="h-5 w-5" />} label="Watching right now" value={String(stats.viewers)} tone="moss" />
         </div>
 
         <div className="mt-8">
@@ -278,11 +295,11 @@ export function Dashboard() {
             <PageLoader />
           ) : polls.length === 0 ? (
             <div className="card flex flex-col items-center px-6 py-16 text-center">
-              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-300">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-clay-200 bg-clay-100 text-clay-700">
                 <Plus className="h-7 w-7" />
               </span>
-              <h2 className="mt-4 text-lg font-bold text-white">No polls yet</h2>
-              <p className="mt-1.5 max-w-sm text-sm text-slate-400">
+              <h2 className="heading mt-4 text-lg">No polls yet</h2>
+              <p className="mt-1.5 max-w-sm text-sm text-ink-500">
                 Create your first poll and share the link — everyone watching will see results update live.
               </p>
               <Link to="/polls/new" className="btn-primary mt-6">

@@ -90,12 +90,12 @@ export function CreatePoll() {
       </header>
 
       <main className="mx-auto max-w-3xl px-6 pb-24">
-        <h1 className="text-2xl font-extrabold tracking-tight text-white">Create a poll</h1>
-        <p className="mt-1.5 text-sm text-slate-400">
+        <h1 className="heading text-2xl">Create a poll</h1>
+        <p className="mt-1.5 text-sm text-ink-500">
           Write your question, add options, and share the link. Results update live for everyone watching.
         </p>
 
-        <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-8">
+        <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-6">
           <section className="card p-6">
             <label className="label" htmlFor="question">
               Question
@@ -109,10 +109,10 @@ export function CreatePoll() {
               maxLength={200}
               required
             />
-            {qErr && <p className="mt-1.5 text-xs text-rose-400">{qErr}</p>}
+            {qErr && <p className="mt-1.5 text-xs text-brick-600">{qErr}</p>}
             <div className="mt-4">
               <label className="label" htmlFor="description">
-                Description <span className="font-normal text-slate-600">(optional)</span>
+                Description <span className="font-normal text-ink-300">(optional)</span>
               </label>
               <textarea
                 id="description"
@@ -129,12 +129,12 @@ export function CreatePoll() {
           <section className="card p-6">
             <div className="mb-4 flex items-center justify-between">
               <label className="label !mb-0">Options</label>
-              <span className="text-xs text-slate-500">{options.length}/8</span>
+              <span className="font-mono text-xs text-ink-400">{options.length}/8</span>
             </div>
             <div className="flex flex-col gap-3">
               {options.map((opt, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <GripVertical className="h-4 w-4 shrink-0 text-slate-600" />
+                  <GripVertical className="h-4 w-4 shrink-0 text-ink-200" />
                   <input
                     className="input"
                     placeholder={`Option ${i + 1}`}
@@ -147,7 +147,7 @@ export function CreatePoll() {
                     type="button"
                     onClick={() => removeOption(i)}
                     disabled={options.length <= 2}
-                    className="rounded-lg p-2 text-slate-500 transition hover:bg-white/5 hover:text-rose-300 disabled:opacity-30"
+                    className="rounded-lg p-2 text-ink-300 transition hover:bg-brick-50 hover:text-brick-600 disabled:opacity-30"
                     aria-label={`Remove option ${i + 1}`}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -155,7 +155,7 @@ export function CreatePoll() {
                 </div>
               ))}
             </div>
-            {oErr && <p className="mt-2 text-xs text-rose-400">{oErr}</p>}
+            {oErr && <p className="mt-2 text-xs text-brick-600">{oErr}</p>}
             <button type="button" onClick={addOption} className="btn-ghost mt-4 w-full border-dashed text-sm">
               <Plus className="h-4 w-4" /> Add option
             </button>
@@ -164,12 +164,14 @@ export function CreatePoll() {
           <section className="card grid gap-6 p-6 sm:grid-cols-2">
             <div>
               <label className="label">Voting mode</label>
-              <div className="flex rounded-xl border border-white/10 bg-ink-850 p-1">
+              <div className="flex rounded-xl border border-paper-300 bg-paper-100 p-1">
                 <button
                   type="button"
                   onClick={() => setMultiSelect(false)}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                    !multiSelect ? 'bg-brand-600 text-white shadow-glow-sm' : 'text-slate-400 hover:text-white'
+                  className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                    !multiSelect
+                      ? 'border-paper-300 bg-white text-ink-950 shadow-sm'
+                      : 'border-transparent text-ink-500 hover:text-ink-800'
                   }`}
                 >
                   Single choice
@@ -177,8 +179,10 @@ export function CreatePoll() {
                 <button
                   type="button"
                   onClick={() => setMultiSelect(true)}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                    multiSelect ? 'bg-brand-600 text-white shadow-glow-sm' : 'text-slate-400 hover:text-white'
+                  className={`flex-1 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                    multiSelect
+                      ? 'border-paper-300 bg-white text-ink-950 shadow-sm'
+                      : 'border-transparent text-ink-500 hover:text-ink-800'
                   }`}
                 >
                   Multi-select
@@ -198,7 +202,7 @@ export function CreatePoll() {
                 onChange={(e) => setExpiresInMinutes(Number(e.target.value))}
               >
                 {EXPIRY_OPTIONS.map((o) => (
-                  <option key={o.minutes} value={o.minutes} className="bg-ink-850">
+                  <option key={o.minutes} value={o.minutes} className="bg-white text-ink-900">
                     {o.label}
                   </option>
                 ))}

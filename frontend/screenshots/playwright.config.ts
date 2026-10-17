@@ -10,7 +10,7 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:5173',
     viewport: { width: 1440, height: 900 },
-    colorScheme: 'dark',
+    colorScheme: 'light',
   },
   webServer: {
     command: 'npm run dev',

@@ -34,11 +34,11 @@ export function Toaster() {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className="pointer-events-auto flex items-center gap-2.5 rounded-xl border border-white/10 bg-ink-800/95 px-4 py-3 text-sm text-slate-100 shadow-xl backdrop-blur animate-fade-up"
+          className="pointer-events-auto flex items-center gap-2.5 rounded-xl border border-paper-300 bg-white px-4 py-3 text-sm text-ink-800 shadow-lift animate-fade-up"
         >
-          {t.kind === 'success' && <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />}
-          {t.kind === 'error' && <AlertTriangle className="h-4 w-4 shrink-0 text-rose-400" />}
-          {t.kind === 'info' && <Info className="h-4 w-4 shrink-0 text-brand-400" />}
+          {t.kind === 'success' && <CheckCircle2 className="h-4 w-4 shrink-0 text-moss-600" />}
+          {t.kind === 'error' && <AlertTriangle className="h-4 w-4 shrink-0 text-brick-500" />}
+          {t.kind === 'info' && <Info className="h-4 w-4 shrink-0 text-cornflower-600" />}
           <span>{t.message}</span>
         </div>
       ))}

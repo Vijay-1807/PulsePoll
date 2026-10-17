@@ -121,7 +121,7 @@ export function PollView() {
         particleCount: 90,
         spread: 72,
         origin: { y: 0.65 },
-        colors: ['#8b5cf6', '#d946ef', '#f0abfc', '#ffffff'],
+        colors: ['#C6713C', '#E6B093', '#3D82E8', '#A3CEFF', '#4A753C'],
         disableForReducedMotion: true,
       })
     } catch (err) {
@@ -155,9 +155,9 @@ export function PollView() {
     if (closed) return <ClosedDot />
     if (status === 'live') return <LiveDot />
     return (
-      <span className="chip border-amber-400/25 bg-amber-400/10 text-amber-300">
-        <span className="h-1.5 w-1.5 animate-pulse-soft rounded-full bg-amber-400" />
-        {status === 'closed' ? 'OFFLINE' : 'CONNECTING'}
+      <span className="chip border-gold-200 bg-gold-50 text-gold-700">
+        <span className="h-2 w-2 animate-pulse-soft rounded-full bg-gold-500" />
+        {status === 'closed' ? 'offline' : 'connecting'}
       </span>
     )
   }, [closed, status])
@@ -186,7 +186,7 @@ export function PollView() {
   if (!poll) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <Spinner className="h-8 w-8 text-brand-400" />
+        <Spinner className="h-8 w-8 text-clay-600" />
       </div>
     )
   }
@@ -196,7 +196,7 @@ export function PollView() {
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5">
         <Logo />
         <div className="flex items-center gap-2.5">
-          <span className="chip border-white/10 bg-white/[0.04] text-slate-300">
+          <span className="chip hidden border-cornflower-200 bg-cornflower-50 text-cornflower-700 sm:inline-flex">
             <Eye className="h-3 w-3" /> {poll.viewers} watching
           </span>
           <button onClick={copyLink} className="btn-ghost !px-3 !py-2 text-xs" aria-label="Copy poll link">
@@ -214,22 +214,20 @@ export function PollView() {
             <div className="flex flex-wrap items-center gap-2.5">
               {connectionChip}
               {poll.expiresAt && !closed && (
-                <span className="chip border-white/10 bg-white/[0.04] text-slate-300">
+                <span className="chip border-gold-200 bg-gold-50 text-gold-700">
                   <Clock className="h-3 w-3" /> closes in {countdown(poll.expiresAt)}
                 </span>
               )}
             </div>
 
-            <h1 className="mt-4 text-balance text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl">
-              {poll.question}
-            </h1>
-            {poll.description && <p className="mt-3 text-[15px] leading-relaxed text-slate-400">{poll.description}</p>}
-            <p className="mt-4 font-mono text-[12px] text-slate-600">
+            <h1 className="heading mt-4 text-balance text-2xl leading-tight sm:text-3xl">{poll.question}</h1>
+            {poll.description && <p className="mt-3 text-[15px] leading-relaxed text-ink-600">{poll.description}</p>}
+            <p className="mt-4 font-mono text-[12px] text-ink-400">
               poll/{poll.slug} · {poll.multiSelect ? 'pick all that apply' : 'pick one'}
             </p>
 
             {closed && (
-              <div className="mt-5 flex items-center gap-2.5 rounded-xl border border-amber-400/20 bg-amber-400/[0.06] px-4 py-3 text-sm text-amber-200">
+              <div className="mt-5 flex items-center gap-2.5 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm text-gold-700">
                 <Lock className="h-4 w-4 shrink-0" />
                 {expired ? 'This poll has reached its closing time.' : 'Voting is closed. Results are final.'}
               </div>
@@ -247,23 +245,25 @@ export function PollView() {
                     data-testid={`option-${opt.id}`}
                     className={`group flex items-center justify-between gap-3 rounded-xl border px-4 py-3.5 text-left text-[15px] font-medium transition-all ${
                       selected
-                        ? 'border-brand-500/60 bg-brand-500/[0.12] text-white shadow-glow-sm'
+                        ? 'border-cornflower-500 bg-cornflower-50 text-ink-950 ring-4 ring-cornflower-500/10'
                         : mine
-                          ? 'border-brand-500/40 bg-brand-500/[0.07] text-white'
-                          : 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/20 hover:bg-white/[0.06]'
+                          ? 'border-cornflower-300 bg-cornflower-50/60 text-ink-900'
+                          : 'border-paper-300 bg-white text-ink-700 hover:border-ink-300 hover:bg-paper-50'
                     } ${closed || hasVoted ? 'cursor-default' : 'cursor-pointer active:scale-[0.995]'}`}
                   >
                     <span className="flex items-center gap-3">
                       <span
                         className={`flex h-5 w-5 shrink-0 items-center justify-center border-2 transition ${
                           poll.multiSelect ? 'rounded-md' : 'rounded-full'
-                        } ${selected || mine ? 'border-brand-400 bg-brand-500 text-white' : 'border-slate-600'}`}
+                        } ${selected || mine ? 'border-cornflower-600 bg-cornflower-600 text-white' : 'border-ink-300'}`}
                       >
                         {(selected || mine) && <CheckCircle2 className="h-3.5 w-3.5" />}
                       </span>
                       {opt.text}
                     </span>
-                    {mine && <span className="text-[11px] font-bold uppercase tracking-wider text-brand-300">your vote</span>}
+                    {mine && (
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-cornflower-700">your vote</span>
+                    )}
                   </button>
                 )
               })}
@@ -286,7 +286,7 @@ export function PollView() {
             )}
 
             {hasVoted && (
-              <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-emerald-400/20 bg-emerald-400/[0.06] px-4 py-3 text-sm text-emerald-200">
+              <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-moss-200 bg-moss-50 px-4 py-3 text-sm text-moss-800">
                 <CheckCircle2 className="h-4 w-4 shrink-0" />
                 Vote recorded — watch the results move live.
               </div>
@@ -297,9 +297,12 @@ export function PollView() {
         <section className="flex flex-col gap-6 animate-fade-up" style={{ animationDelay: '80ms' }}>
           <div className="card p-6" data-testid="results-card">
             <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">Live results</h2>
-              <span className="text-sm text-slate-400">
-                <span className="font-mono text-lg font-bold tabular-nums text-white" data-testid="total-votes">
+              <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-ink-400">Live results</h2>
+              <span className="text-sm text-ink-500">
+                <span
+                  className="font-display text-2xl font-semibold tabular-nums text-ink-950"
+                  data-testid="total-votes"
+                >
                   {poll.totalVotes}
                 </span>{' '}
                 {poll.totalVotes === 1 ? 'vote' : 'votes'}
@@ -307,37 +310,37 @@ export function PollView() {
             </div>
             <ResultsBars options={poll.options} counts={poll.counts} total={poll.totalVotes} myChoices={myVote ?? []} />
             {poll.totalVotes === 0 && (
-              <p className="mt-5 text-center text-sm text-slate-500">No votes yet — be the first to weigh in.</p>
+              <p className="mt-5 text-center text-sm text-ink-400">No votes yet — be the first to weigh in.</p>
             )}
           </div>
 
           <div className="card p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">Coming in</h2>
+              <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-ink-400">Coming in</h2>
               {!closed && (
-                <span className="text-[11px] text-slate-500">
+                <span className="font-mono text-[11px] text-ink-400">
                   {status === 'live' ? 'streaming via websocket' : 'reconnecting…'}
                 </span>
               )}
             </div>
             {activity.length === 0 ? (
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-ink-400">
                 {closed ? 'Voting has ended.' : 'Nothing yet. Votes will appear here the second they land.'}
               </p>
             ) : (
               <ul className="flex flex-col gap-2.5">
                 {activity.map((a) => (
-                  <li key={a.key} className="flex items-center gap-2.5 text-sm text-slate-300 animate-fade-up">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-brand-500/30 to-fuchsia-500/20 font-mono text-[10px] font-bold text-brand-200">
+                  <li key={a.key} className="flex items-center gap-2.5 text-sm text-ink-600 animate-fade-up">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full border border-clay-200 bg-clay-100 font-mono text-[10px] font-bold text-clay-800">
                       {a.voter.slice(0, 2)}
                     </span>
                     <span className="min-w-0 flex-1 truncate">
                       Anonymous voter picked{' '}
-                      <span className="font-semibold text-white">
+                      <span className="font-semibold text-ink-950">
                         {a.optionIds.map((id) => poll.options.find((o) => o.id === id)?.text ?? 'an option').join(', ')}
                       </span>
                     </span>
-                    <span className="shrink-0 text-[11px] text-slate-500">{timeAgo(a.at)}</span>
+                    <span className="shrink-0 text-[11px] text-ink-400">{timeAgo(a.at)}</span>
                   </li>
                 ))}
               </ul>
@@ -346,10 +349,12 @@ export function PollView() {
 
           <div className="card flex items-center justify-between gap-4 p-5">
             <div className="flex items-center gap-2.5">
-              <Share2 className="h-5 w-5 text-brand-300" />
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cornflower-200 bg-cornflower-100 text-cornflower-700">
+                <Share2 className="h-4 w-4" />
+              </span>
               <div>
-                <p className="text-sm font-semibold text-white">Get more votes</p>
-                <p className="text-xs text-slate-500">Share the link or let people scan the QR code.</p>
+                <p className="text-sm font-semibold text-ink-950">Get more votes</p>
+                <p className="text-xs text-ink-400">Share the link or let people scan the QR code.</p>
               </div>
             </div>
             <button onClick={() => setShareOpen(true)} className="btn-ghost shrink-0 text-xs">
@@ -371,13 +376,13 @@ function MessageScreen({ title, body, action }: { title: string; body: string; a
         <Logo />
       </header>
       <main className="flex flex-1 flex-col items-center justify-center px-6 pb-24 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400/10 text-amber-300">
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-gold-200 bg-gold-100 text-gold-700">
           <TriangleAlert className="h-7 w-7" />
         </span>
-        <h1 className="mt-4 text-2xl font-bold text-white">{title}</h1>
-        <p className="mt-2 max-w-sm text-sm text-slate-400">{body}</p>
+        <h1 className="heading mt-4 text-2xl">{title}</h1>
+        <p className="mt-2 max-w-sm text-sm text-ink-500">{body}</p>
         {action}
-        <Link to="/" className="mt-4 text-sm font-semibold text-brand-300 hover:text-brand-200">
+        <Link to="/" className="mt-4 text-sm font-semibold text-clay-700 hover:text-clay-800 hover:underline">
           Back to home
         </Link>
       </main>
