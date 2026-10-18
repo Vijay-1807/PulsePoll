@@ -158,6 +158,7 @@ func buildRouter(cfg *config.Config, db *database.DB, rdb *cache.Cache, h *hub.H
 		polls.DELETE("/:id", middleware.RequireAuth(cfg.JWTSecret), hdl.DeletePoll)
 		polls.GET("/:id/export.csv", middleware.RequireAuth(cfg.JWTSecret), hdl.ExportResults)
 		polls.GET("/slug/:slug", hdl.GetPublicPoll)
+		polls.GET("/slug/:slug/timeline", hdl.GetPollTimeline)
 		polls.POST("/slug/:slug/vote", middleware.RateLimit(rdb, "vote", 30, time.Minute), hdl.Vote)
 	}
 

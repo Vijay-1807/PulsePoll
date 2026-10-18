@@ -221,6 +221,68 @@ func (h *Handler) GetPublicPoll(c *gin.Context) {
 	}})
 }
 
+// GetPollTimeline returns per-minute ballot counts for the recent window so
+// the public results page can chart votes over time. Ballots are the durable
+// audit records, so the series is exact and survives Redis restarts.
+func (h *Handler) GetPollTimeline(c *gin.Context) {
+	slug := c.Param("slug")
+	if !validate.ValidSlug(slug) {
+		fail(c, http.StatusNotFound, "poll not found")
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
+	poll, err := h.findPollBySlug(ctx, slug)
+	if err != nil {
+		fail(c, http.StatusInternalServerError, "could not load poll")
+		return
+	}
+	if poll == nil {
+		fail(c, http.StatusNotFound, "poll not found")
+		return
+	}
+
+	const windowMinutes = 120
+	since := time.Now().UTC().Add(-windowMinutes * time.Minute)
+	cur, err := h.DB.Votes.Aggregate(ctx, []bson.M{
+		{"$match": bson.M{"poll_id": poll.ID, "created_at": bson.M{"$gte": since}}},
+		{"$group": bson.M{
+			"_id":   bson.M{"$dateTrunc": bson.M{"date": "$created_at", "unit": "minute"}},
+			"votes": bson.M{"$sum": 1},
+		}},
+		{"$sort": bson.M{"_id": 1}},
+	})
+	if err != nil {
+		fail(c, http.StatusInternalServerError, "could not load timeline")
+		return
+	}
+	defer cur.Close(ctx)
+
+	type bucket struct {
+		T     int64 `json:"t"`
+		Votes int64 `json:"votes"`
+	}
+	buckets := make([]bucket, 0, 32)
+	for cur.Next(ctx) {
+		var row struct {
+			Minute time.Time `bson:"_id"`
+			Votes  int64     `bson:"votes"`
+		}
+		if err := cur.Decode(&row); err != nil {
+			continue
+		}
+		buckets = append(buckets, bucket{T: row.Minute.UnixMilli(), Votes: row.Votes})
+	}
+	if err := cur.Err(); err != nil {
+		fail(c, http.StatusInternalServerError, "could not load timeline")
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"buckets": buckets, "windowMinutes": windowMinutes})
+}
+
 // findOwnedPoll fetches a poll by id and verifies ownership. Returning 404 for
 // someone else's poll avoids leaking which ids exist.
 func (h *Handler) findOwnedPoll(ctx context.Context, id string, ownerID primitive.ObjectID) (*models.Poll, error) {

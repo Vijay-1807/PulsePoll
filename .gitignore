@@ -18,6 +18,7 @@ frontend/.env.development.local
 frontend/test-results/
 frontend/playwright-report/
 frontend/.playwright/
+frontend/screenshots/audit/
 
 # Editor / OS noise
 .vscode/

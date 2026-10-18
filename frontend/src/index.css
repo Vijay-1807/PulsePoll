@@ -15,6 +15,23 @@
   ::selection {
     @apply bg-clay-200 text-clay-900;
   }
+  /* Keyboard users get a clear, on-brand focus ring everywhere. */
+  a:focus-visible,
+  :where(button:not(.btn), [role='button'], select, textarea):focus-visible {
+    outline: 2px solid theme('colors.clay.500');
+    outline-offset: 2px;
+  }
+  /* Respect users who ask for less motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer components {
@@ -32,7 +49,8 @@
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
       transition-all duration-150 outline-none focus-visible:ring-4 focus-visible:ring-clay-500/25
-      disabled:cursor-not-allowed disabled:opacity-45;
+      disabled:cursor-not-allowed disabled:border-paper-300 disabled:bg-paper-200 disabled:text-ink-400
+      disabled:shadow-none disabled:hover:bg-paper-200;
   }
   .btn-primary {
     @apply btn bg-clay-600 text-white shadow-sm hover:bg-clay-700 active:translate-y-px;
@@ -57,5 +75,17 @@
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
     @apply rounded-full bg-ink-200;
+  }
+  /* Scroll-reveal: elements lift in as they enter the viewport. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.65s ease-out,
+      transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-in {
+    opacity: 1;
+    transform: none;
   }
 }

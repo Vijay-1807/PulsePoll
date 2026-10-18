@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, GripVertical, Plus, Timer, Trash2 } from 'lucide-react'
+import { ArrowLeft, Plus, Timer, Trash2 } from 'lucide-react'
 import { Logo } from '../components/Logo'
 import { Spinner } from '../components/Spinner'
 import { toast } from '../components/Toaster'
@@ -133,8 +133,10 @@ export function CreatePoll() {
             </div>
             <div className="flex flex-col gap-3">
               {options.map((opt, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <GripVertical className="h-4 w-4 shrink-0 text-ink-200" />
+                <div key={i} className="flex items-center gap-2.5">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-paper-300 bg-paper-50 font-mono text-[11px] text-ink-400">
+                    {i + 1}
+                  </span>
                   <input
                     className="input"
                     placeholder={`Option ${i + 1}`}

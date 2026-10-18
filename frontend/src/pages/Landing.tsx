@@ -3,6 +3,7 @@ import { ArrowRight, Eye, Radio, Share2, ShieldCheck, Sparkles, Zap } from 'luci
 import { useEffect, useState } from 'react'
 import { Logo } from '../components/Logo'
 import { LiveDot } from '../components/LiveDot'
+import { Reveal } from '../components/Reveal'
 import { GradientBackground } from '@/components/ui/pipo'
 import { useAuth } from '../lib/auth'
 
@@ -108,45 +109,56 @@ export function Landing() {
             Create a poll, share one link, and every screen updates in real time as votes arrive. No refreshes, no
             spreadsheets, no waiting.
           </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link to={user ? '/polls/new' : '/signup'} className="btn-primary !px-6 !py-3 text-base">
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <Link to={user ? '/polls/new' : '/signup'} className="btn-primary w-full !px-6 !py-3 text-base sm:w-auto">
               Create your first poll <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link to={user ? '/dashboard' : '/login'} className="btn-ghost !px-6 !py-3 text-base">
+            <Link to={user ? '/dashboard' : '/login'} className="btn-ghost w-full !px-6 !py-3 text-base sm:w-auto">
               I have an account
             </Link>
           </div>
 
-          <div className="mt-12 grid grid-cols-3 gap-6 border-t border-paper-300 pt-7">
-            <div>
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-clay-200 bg-clay-100 text-clay-700">
-                <Zap className="h-4 w-4" />
-              </span>
-              <div className="mt-2.5 text-sm font-semibold text-ink-900">Real-time</div>
-              <p className="mt-1 text-[13px] leading-snug text-ink-500">Redis pub/sub pushes every vote to all watchers</p>
-            </div>
-            <div>
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-moss-200 bg-moss-100 text-moss-700">
-                <ShieldCheck className="h-4 w-4" />
-              </span>
-              <div className="mt-2.5 text-sm font-semibold text-ink-900">One vote each</div>
-              <p className="mt-1 text-[13px] leading-snug text-ink-500">Server-side fingerprinting keeps results honest</p>
-            </div>
-            <div>
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-cornflower-200 bg-cornflower-100 text-cornflower-700">
-                <Share2 className="h-4 w-4" />
-              </span>
-              <div className="mt-2.5 text-sm font-semibold text-ink-900">Zero friction</div>
-              <p className="mt-1 text-[13px] leading-snug text-ink-500">Share a link or QR — voting needs no account</p>
-            </div>
+          <div className="mt-12 grid gap-5 border-t border-paper-300 pt-7 sm:grid-cols-3 sm:gap-6">
+            {[
+              {
+                icon: <Zap className="h-4 w-4" />,
+                tone: 'border-clay-200 bg-clay-100 text-clay-700',
+                title: 'Real-time',
+                text: 'Redis pub/sub pushes every vote to all watchers',
+              },
+              {
+                icon: <ShieldCheck className="h-4 w-4" />,
+                tone: 'border-moss-200 bg-moss-100 text-moss-700',
+                title: 'One vote each',
+                text: 'Server-side fingerprinting keeps results honest',
+              },
+              {
+                icon: <Share2 className="h-4 w-4" />,
+                tone: 'border-cornflower-200 bg-cornflower-100 text-cornflower-700',
+                title: 'Zero friction',
+                text: 'Share a link or QR — voting needs no account',
+              },
+            ].map((f, i) => (
+              <Reveal key={f.title} delay={i * 90}>
+                <div className="flex items-start gap-3.5 sm:block">
+                  <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border ${f.tone}`}>
+                    {f.icon}
+                  </span>
+                  <div className="sm:mt-2.5">
+                    <div className="text-sm font-semibold text-ink-900">{f.title}</div>
+                    <p className="mt-0.5 text-[13px] leading-snug text-ink-500 sm:mt-1">{f.text}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
 
         <div className="flex justify-center lg:justify-end">
-          <div className="w-full max-w-md animate-fade-up">
+          <Reveal delay={120} className="w-full max-w-md">
             <DemoCard />
             <p className="mt-3 text-center font-mono text-[11px] text-ink-400">sample — the real thing moves faster</p>
-          </div>
+          </Reveal>
         </div>
       </main>
 
@@ -156,12 +168,12 @@ export function Landing() {
             { step: '01', title: 'Create', text: 'Write your question, add 2–8 options, set a timer if you like.' },
             { step: '02', title: 'Share', text: 'Drop the link in the room chat or let people scan the QR code.' },
             { step: '03', title: 'Watch', text: 'Results move the moment someone taps — on every screen at once.' },
-          ].map((s) => (
-            <div key={s.step}>
+          ].map((s, i) => (
+            <Reveal key={s.step} delay={i * 110}>
               <span className="font-display text-3xl font-semibold italic text-clay-500">{s.step}</span>
               <h3 className="heading mt-2 text-lg">{s.title}</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-ink-500">{s.text}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>

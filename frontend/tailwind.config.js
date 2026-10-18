@@ -95,6 +95,7 @@ export default {
         'fade-up': 'fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both',
         'fade-in': 'fadeIn 0.35s ease-out both',
         'bar-slide': 'barSlide 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
+        pop: 'pop 0.4s cubic-bezier(0.22, 1, 0.36, 1) both',
       },
       keyframes: {
         pulseSoft: {
@@ -111,6 +112,11 @@ export default {
         },
         barSlide: {
           from: { width: '0%' },
+        },
+        pop: {
+          '0%': { transform: 'scale(0.82)', opacity: '0.25' },
+          '60%': { transform: 'scale(1.06)' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
         },
       },
     },

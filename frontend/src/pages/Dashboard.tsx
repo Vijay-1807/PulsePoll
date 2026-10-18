@@ -117,7 +117,7 @@ function PollCard({
   }
 
   return (
-    <div className="card flex flex-col p-5 transition hover:shadow-lift">
+    <div className="card flex flex-col p-5 transition duration-200 hover:-translate-y-0.5 hover:shadow-lift">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
@@ -162,7 +162,7 @@ function PollCard({
         <span>{new Date(poll.createdAt).toLocaleDateString()}</span>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-paper-200 pt-4">
+      <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-paper-200 pt-4">
         <Link to={`/p/${poll.slug}`} className="btn-ghost !px-3 !py-2 text-xs">
           <BarChart3 className="h-3.5 w-3.5" /> Open
         </Link>

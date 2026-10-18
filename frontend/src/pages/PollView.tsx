@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import {
@@ -10,12 +10,14 @@ import {
   QrCode,
   Share2,
   TriangleAlert,
+  UserRound,
   Vote as VoteIcon,
 } from 'lucide-react'
 import { Logo } from '../components/Logo'
 import { LiveDot, ClosedDot } from '../components/LiveDot'
 import { Spinner } from '../components/Spinner'
 import { ResultsBars } from '../components/ResultsBars'
+import type { TimelinePoint } from '../components/VotesChart'
 import { ShareModal } from '../components/ShareModal'
 import { toast } from '../components/Toaster'
 import { api, ApiError, shareUrl } from '../lib/api'
@@ -24,8 +26,28 @@ import { getMyVote, saveMyVote, voterId } from '../lib/voter'
 import { countdown, timeAgo } from '../lib/format'
 import type { PublicPoll, VoteEventPayload } from '../types'
 
+// recharts is sizeable; load it only when a results panel actually renders.
+const VotesChart = lazy(() => import('../components/VotesChart').then((m) => ({ default: m.VotesChart })))
+
 interface ActivityItem extends VoteEventPayload {
   key: number
+}
+
+// Stretch sparse buckets into a continuous minute-by-minute series so the
+// chart always reads as a real timeline, not isolated spikes. A few quiet
+// minutes are padded before the first ballot for context.
+function fillTimeline(raw: TimelinePoint[]): TimelinePoint[] {
+  const minute = 60_000
+  const end = Math.floor(Date.now() / minute) * minute
+  if (raw.length === 0) return []
+  const byT = new Map(raw.map((b) => [b.t, b.votes]))
+  const first = Math.min(raw[0].t, end)
+  const start = Math.max(first - 4 * minute, end - 119 * minute)
+  const out: TimelinePoint[] = []
+  for (let t = start; t <= end && out.length < 120; t += minute) {
+    out.push({ t, votes: byT.get(t) ?? 0 })
+  }
+  return out
 }
 
 export function PollView() {
@@ -38,6 +60,7 @@ export function PollView() {
   const [voting, setVoting] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [activity, setActivity] = useState<ActivityItem[]>([])
+  const [timeline, setTimeline] = useState<TimelinePoint[]>([])
   const [tick, setTick] = useState(0)
   const activityKey = useRef(0)
   const { status, lastEvent } = usePollSocket(slug)
@@ -58,6 +81,19 @@ export function PollView() {
   useEffect(() => {
     void loadPoll()
   }, [loadPoll])
+
+  // Seed the votes-over-time chart from the durable ballot log.
+  useEffect(() => {
+    let cancelled = false
+    api<{ buckets: TimelinePoint[] }>(`/api/polls/slug/${slug}/timeline`)
+      .then((res) => {
+        if (!cancelled) setTimeline(fillTimeline(res.buckets ?? []))
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [slug])
 
   // Countdown re-render every second while a timer is set.
   useEffect(() => {
@@ -90,6 +126,15 @@ export function PollView() {
     if (lastEvent.type === 'vote') {
       activityKey.current += 1
       setActivity((prev) => [{ ...lastEvent.payload, key: activityKey.current }, ...prev].slice(0, 6))
+      setTimeline((prev) => {
+        const minute = Math.floor(Date.now() / 60_000) * 60_000
+        if (prev.length > 0 && prev[prev.length - 1].t === minute) {
+          const next = [...prev]
+          next[next.length - 1] = { ...next[next.length - 1], votes: next[next.length - 1].votes + 1 }
+          return next
+        }
+        return [...prev, { t: minute, votes: 1 }].slice(-120)
+      })
     }
   }, [lastEvent])
 
@@ -300,7 +345,8 @@ export function PollView() {
               <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-ink-400">Live results</h2>
               <span className="text-sm text-ink-500">
                 <span
-                  className="font-display text-2xl font-semibold tabular-nums text-ink-950"
+                  key={poll.totalVotes}
+                  className="inline-block animate-pop font-display text-2xl font-semibold tabular-nums text-ink-950"
                   data-testid="total-votes"
                 >
                   {poll.totalVotes}
@@ -312,6 +358,17 @@ export function PollView() {
             {poll.totalVotes === 0 && (
               <p className="mt-5 text-center text-sm text-ink-400">No votes yet — be the first to weigh in.</p>
             )}
+            <div className="mt-5 border-t border-paper-200 pt-4">
+              <div className="mb-2 flex items-center justify-between">
+                <h3 className="text-[11px] font-bold uppercase tracking-[0.14em] text-ink-400">Votes over time</h3>
+                <span className="font-mono text-[10px] text-ink-300">last 2h</span>
+              </div>
+              <Suspense
+                fallback={<div className="h-[132px] rounded-xl border border-dashed border-paper-300 bg-paper-50/60" />}
+              >
+                <VotesChart points={timeline} />
+              </Suspense>
+            </div>
           </div>
 
           <div className="card p-6">
@@ -330,37 +387,39 @@ export function PollView() {
             ) : (
               <ul className="flex flex-col gap-2.5">
                 {activity.map((a) => (
-                  <li key={a.key} className="flex items-center gap-2.5 text-sm text-ink-600 animate-fade-up">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full border border-clay-200 bg-clay-100 font-mono text-[10px] font-bold text-clay-800">
-                      {a.voter.slice(0, 2)}
+                  <li key={a.key} className="flex items-start gap-2.5 text-sm text-ink-600 animate-fade-up">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-clay-200 bg-clay-100 text-clay-700">
+                      <UserRound className="h-3 w-3" />
                     </span>
-                    <span className="min-w-0 flex-1 truncate">
+                    <span className="min-w-0 flex-1 leading-snug">
                       Anonymous voter picked{' '}
                       <span className="font-semibold text-ink-950">
                         {a.optionIds.map((id) => poll.options.find((o) => o.id === id)?.text ?? 'an option').join(', ')}
                       </span>
                     </span>
-                    <span className="shrink-0 text-[11px] text-ink-400">{timeAgo(a.at)}</span>
+                    <span className="mt-0.5 shrink-0 text-[11px] text-ink-400">{timeAgo(a.at)}</span>
                   </li>
                 ))}
               </ul>
             )}
           </div>
 
-          <div className="card flex items-center justify-between gap-4 p-5">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cornflower-200 bg-cornflower-100 text-cornflower-700">
-                <Share2 className="h-4 w-4" />
-              </span>
-              <div>
-                <p className="text-sm font-semibold text-ink-950">Get more votes</p>
-                <p className="text-xs text-ink-400">Share the link or let people scan the QR code.</p>
+          {!closed && (
+            <div className="card flex items-center justify-between gap-4 p-5">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cornflower-200 bg-cornflower-100 text-cornflower-700">
+                  <Share2 className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-ink-950">Get more votes</p>
+                  <p className="text-xs text-ink-400">Share the link or let people scan the QR code.</p>
+                </div>
               </div>
+              <button onClick={() => setShareOpen(true)} className="btn-ghost shrink-0 text-xs">
+                <QrCode className="h-3.5 w-3.5" /> Open
+              </button>
             </div>
-            <button onClick={() => setShareOpen(true)} className="btn-ghost shrink-0 text-xs">
-              <QrCode className="h-3.5 w-3.5" /> Open
-            </button>
-          </div>
+          )}
         </section>
       </main>
 
