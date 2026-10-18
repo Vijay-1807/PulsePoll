@@ -30,7 +30,7 @@ export function ShareModal({ open, onClose, url, question }: Props) {
       toast('Link copied to clipboard', 'success')
       window.setTimeout(() => setCopied(false), 2000)
     } catch {
-      toast('Could not copy — select the link manually', 'error')
+      toast('Could not copy - select the link manually', 'error')
     }
   }
 
@@ -45,7 +45,7 @@ export function ShareModal({ open, onClose, url, question }: Props) {
         <div className="mb-5 flex items-start justify-between">
           <div>
             <h3 className="heading text-lg">Share this poll</h3>
-            <p className="mt-0.5 text-sm text-ink-500">Scan the code or send the link — results update live for everyone.</p>
+            <p className="mt-0.5 text-sm text-ink-500">Scan the code or send the link - results update live for everyone.</p>
           </div>
           <button
             onClick={onClose}

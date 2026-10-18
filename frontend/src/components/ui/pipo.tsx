@@ -1,4 +1,4 @@
-// GradientBackground — "Pipo", made with the 21st.dev Gradient
+// GradientBackground - "Pipo", made with the 21st.dev Gradient
 // Builder and exported as live CSS (the builder's own Copy-CSS background,
 // plus its soften-blur and grain passes). Zero dependencies: one <div> that
 // fills its parent. Drop it behind your content:

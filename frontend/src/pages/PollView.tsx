@@ -171,7 +171,7 @@ export function PollView() {
       })
     } catch (err) {
       if (err instanceof ApiError && err.status === 409) {
-        // Already voted from this browser before — reflect it.
+        // Already voted from this browser before - reflect it.
         saveMyVote(slug, [])
         setMyVote([])
         toast('You already voted on this poll', 'info')
@@ -333,7 +333,7 @@ export function PollView() {
             {hasVoted && (
               <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-moss-200 bg-moss-50 px-4 py-3 text-sm text-moss-800">
                 <CheckCircle2 className="h-4 w-4 shrink-0" />
-                Vote recorded — watch the results move live.
+                Vote recorded - watch the results move live.
               </div>
             )}
           </div>
@@ -356,7 +356,7 @@ export function PollView() {
             </div>
             <ResultsBars options={poll.options} counts={poll.counts} total={poll.totalVotes} myChoices={myVote ?? []} />
             {poll.totalVotes === 0 && (
-              <p className="mt-5 text-center text-sm text-ink-400">No votes yet — be the first to weigh in.</p>
+              <p className="mt-5 text-center text-sm text-ink-400">No votes yet - be the first to weigh in.</p>
             )}
             <div className="mt-5 border-t border-paper-200 pt-4">
               <div className="mb-2 flex items-center justify-between">
@@ -376,7 +376,7 @@ export function PollView() {
               <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-ink-400">Coming in</h2>
               {!closed && (
                 <span className="font-mono text-[11px] text-ink-400">
-                  {status === 'live' ? 'streaming via websocket' : 'reconnecting…'}
+                  {status === 'live' ? 'streaming via websocket' : 'reconnecting...'}
                 </span>
               )}
             </div>

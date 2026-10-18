@@ -54,7 +54,7 @@ test.describe('PulsePoll live flow', () => {
       await expect(viewerPage.getByText('Vote recorded')).toBeVisible()
       await expect(viewerPage.getByTestId('total-votes')).toHaveText('1')
 
-      // 3. Creator's page — untouched, not refreshed — must reflect it live.
+      // 3. Creator's page - untouched, not refreshed - must reflect it live.
       await expect(creatorPage.getByTestId('total-votes')).toHaveText('1')
       await expect(creatorPage.getByText('Anonymous voter picked').first()).toBeVisible()
 
@@ -74,7 +74,7 @@ test.describe('PulsePoll live flow', () => {
     }
   })
 
-  test('one person, one vote — enforced by the server', async ({ browser }) => {
+  test('one person, one vote - enforced by the server', async ({ browser }) => {
     const creator = await browser.newContext()
     const voter = await browser.newContext()
     const creatorPage = await creator.newPage()
@@ -90,7 +90,7 @@ test.describe('PulsePoll live flow', () => {
       await expect(voterPage.getByText('Vote recorded')).toBeVisible()
       await expect(voterPage.getByTestId('total-votes')).toHaveText('1')
 
-      // Replaying the same ballot through the API is rejected too — the UI
+      // Replaying the same ballot through the API is rejected too - the UI
       // hiding the button is not the security boundary.
       const slug = pollUrl.split('/p/')[1]
       const apiBase = process.env.API_URL ?? process.env.PW_BASE_URL ?? 'http://localhost:8080'

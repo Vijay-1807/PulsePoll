@@ -136,7 +136,7 @@ export function Landing() {
                 icon: <Share2 className="h-4 w-4" />,
                 tone: 'border-cornflower-200 bg-cornflower-100 text-cornflower-700',
                 title: 'Zero friction',
-                text: 'Share a link or QR — voting needs no account',
+                text: 'Share a link or QR - voting needs no account',
               },
             ].map((f, i) => (
               <Reveal key={f.title} delay={i * 90}>
@@ -157,7 +157,7 @@ export function Landing() {
         <div className="flex justify-center lg:justify-end">
           <Reveal delay={120} className="w-full max-w-md">
             <DemoCard />
-            <p className="mt-3 text-center font-mono text-[11px] text-ink-400">sample — the real thing moves faster</p>
+            <p className="mt-3 text-center font-mono text-[11px] text-ink-400">sample - the real thing moves faster</p>
           </Reveal>
         </div>
       </main>
@@ -165,9 +165,9 @@ export function Landing() {
       <section className="relative z-10 mx-auto max-w-6xl px-6 pb-20">
         <div className="grid gap-10 border-t border-paper-300 pt-10 sm:grid-cols-3">
           {[
-            { step: '01', title: 'Create', text: 'Write your question, add 2–8 options, set a timer if you like.' },
+            { step: '01', title: 'Create', text: 'Write your question, add 2-8 options, set a timer if you like.' },
             { step: '02', title: 'Share', text: 'Drop the link in the room chat or let people scan the QR code.' },
-            { step: '03', title: 'Watch', text: 'Results move the moment someone taps — on every screen at once.' },
+            { step: '03', title: 'Watch', text: 'Results move the moment someone taps - on every screen at once.' },
           ].map((s, i) => (
             <Reveal key={s.step} delay={i * 110}>
               <span className="font-display text-3xl font-semibold italic text-clay-500">{s.step}</span>
@@ -182,7 +182,7 @@ export function Landing() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-7 text-sm text-ink-400">
           <div className="flex items-center gap-2">
             <Radio className="h-4 w-4 text-clay-500" />
-            PulsePoll — built with React, Go, MongoDB & Redis
+            PulsePoll - built with React, Go, MongoDB & Redis
           </div>
           <span>Live polling, no refresh required.</span>
         </div>

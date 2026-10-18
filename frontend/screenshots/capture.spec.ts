@@ -41,7 +41,7 @@ test('capture product screenshots', async ({ browser, request }) => {
     'Public API',
   ])
   const p2 = await createPoll('Lunch spot for the offsite?', ['Ramen House', 'Taco Bar', 'Green Bowl', 'Pizza Corner'])
-  await createPoll('Should we move standup to 10am?', ['Yes', 'No'], 'Quick one — voting closes Friday.')
+  await createPoll('Should we move standup to 10am?', ['Yes', 'No'], 'Quick one - voting closes Friday.')
 
   const votes: Array<[string, number, string]> = [
     [p1.slug, 0, 'v1'], [p1.slug, 0, 'v2'], [p1.slug, 0, 'v3'], [p1.slug, 1, 'v4'],

@@ -1,4 +1,4 @@
-# Render Blueprint — deploy the PulsePoll backend + Redis in one click.
+# Render Blueprint - deploy the PulsePoll backend + Redis in one click.
 # https://render.com/docs/blueprint-spec
 #
 # Before deploying, create a free MongoDB Atlas cluster and set the

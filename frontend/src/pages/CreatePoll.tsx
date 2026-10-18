@@ -63,7 +63,7 @@ export function CreatePoll() {
           expiresInMinutes,
         },
       })
-      toast('Poll created — share the link!', 'success')
+      toast('Poll created - share the link!', 'success')
       navigate(`/p/${res.poll.slug}`)
     } catch (err) {
       if (err instanceof ApiError && err.fields) {
@@ -119,7 +119,7 @@ export function CreatePoll() {
                 className="input resize-none"
                 rows={2}
                 maxLength={500}
-                placeholder="Add context for your audience…"
+                placeholder="Add context for your audience..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />

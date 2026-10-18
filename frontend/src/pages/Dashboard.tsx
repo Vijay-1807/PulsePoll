@@ -275,7 +275,7 @@ export function Dashboard() {
           <div>
             <h1 className="heading text-2xl">Your polls</h1>
             <p className="mt-1 text-sm text-ink-500">
-              Totals below refresh every 10 seconds — open a poll to see votes land live.
+              Totals below refresh every 10 seconds - open a poll to see votes land live.
             </p>
           </div>
           <button onClick={() => void load()} className="btn-ghost !px-3 !py-2 text-xs" disabled={refreshing}>
@@ -300,7 +300,7 @@ export function Dashboard() {
               </span>
               <h2 className="heading mt-4 text-lg">No polls yet</h2>
               <p className="mt-1.5 max-w-sm text-sm text-ink-500">
-                Create your first poll and share the link — everyone watching will see results update live.
+                Create your first poll and share the link - everyone watching will see results update live.
               </p>
               <Link to="/polls/new" className="btn-primary mt-6">
                 Create a poll

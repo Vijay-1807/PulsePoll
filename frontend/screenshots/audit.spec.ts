@@ -102,7 +102,7 @@ test('audit capture', async ({ page, request }) => {
     await page.goto('/polls/new')
     await page.waitForSelector('#question', { timeout: 15_000 })
     await page.fill('#question', 'Where should the offsite be this year?')
-    await page.fill('textarea', 'Pick the destination — results update live on the big screen.')
+    await page.fill('textarea', 'Pick the destination - results update live on the big screen.')
     await page.fill('input[placeholder="Option 1"]', 'Goa beach resort')
     await page.fill('input[placeholder="Option 2"]', 'Himalayan trek')
     await page.click('button:has-text("Add option")')
