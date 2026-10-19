@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -17,6 +18,8 @@ type DB struct {
 }
 
 func Connect(ctx context.Context, uri, dbName string) (*DB, error) {
+	uri = strings.TrimSpace(uri)
+	dbName = strings.TrimSpace(dbName)
 	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 

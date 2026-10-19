@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -36,6 +37,7 @@ type Cache struct {
 }
 
 func Connect(ctx context.Context, url string) (*Cache, error) {
+	url = strings.TrimSpace(url)
 	opts, err := redis.ParseURL(url)
 	if err != nil {
 		return nil, fmt.Errorf("parse redis url: %w", err)
