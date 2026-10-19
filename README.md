@@ -21,7 +21,8 @@ multi-select, optional auto-close timer), shares the link or QR code, and every 
 the audience, the creator's dashboard, a projector in the room - updates the moment a vote
 lands. No refreshes, no polling the API, no manual tallying.
 
-**Live demo:** _deployed on Vercel + Render - link will be added here on completion_
+**Live demo:** [https://pulse-poll-sage.vercel.app](https://pulse-poll-sage.vercel.app)  
+**API Health:** [https://pulsepoll-api-gmn8.onrender.com/api/health](https://pulsepoll-api-gmn8.onrender.com/api/health)  
 
 ## How the real-time pipeline works
 
