@@ -219,6 +219,13 @@ runs behind one port.
 - `JWT_SECRET` is mandatory in `APP_ENV=production` (the server refuses to boot with the
   dev default).
 
+
+## Documentation & Submission
+
+- [Walkthrough Video Script & Talking Points](docs/DEMO_VIDEO_SCRIPT.md) — Includes timestamps, word-for-word lines, and direct answers to the two mandatory evaluation questions (hardest challenge & AI tools).
+- [Deployment Guide](docs/DEPLOYMENT_GUIDE.md) — Step-by-step setup for Render, Vercel, and MongoDB Atlas.
+
 ---
 
 Built by **Bontha Vijay** for the HCL GUVI developer internship task.
+
