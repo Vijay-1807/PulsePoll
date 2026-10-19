@@ -20,7 +20,7 @@ import { LiveDot, ClosedDot } from '../components/LiveDot'
 import { PageLoader } from '../components/Spinner'
 import { ShareModal } from '../components/ShareModal'
 import { toast } from '../components/Toaster'
-import { api, ApiError, shareUrl } from '../lib/api'
+import { api, ApiError, downloadPollCsv, shareUrl } from '../lib/api'
 import { useAuth } from '../lib/auth'
 import { compact } from '../lib/format'
 import type { PollSummary } from '../types'
@@ -100,19 +100,10 @@ function PollCard({
 
   const exportCsv = async () => {
     try {
-      const token = localStorage.getItem('pp_token')
-      const res = await fetch(`/api/polls/${poll.id}/export.csv`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-      })
-      if (!res.ok) throw new Error()
-      const blob = await res.blob()
-      const a = document.createElement('a')
-      a.href = URL.createObjectURL(blob)
-      a.download = `pulsepoll-${poll.slug}.csv`
-      a.click()
-      URL.revokeObjectURL(a.href)
-    } catch {
-      toast('Could not export results', 'error')
+      await downloadPollCsv(poll.id, poll.slug)
+      toast('Results exported', 'success')
+    } catch (err) {
+      toast(err instanceof ApiError ? err.message : 'Could not export results', 'error')
     }
   }
 

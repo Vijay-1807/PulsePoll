@@ -47,7 +47,7 @@
     @apply mb-1.5 block text-[13px] font-semibold text-ink-600;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold whitespace-nowrap shrink-0
       transition-all duration-150 outline-none focus-visible:ring-4 focus-visible:ring-clay-500/25
       disabled:cursor-not-allowed disabled:border-paper-300 disabled:bg-paper-200 disabled:text-ink-400
       disabled:shadow-none disabled:hover:bg-paper-200;

@@ -238,24 +238,26 @@ export function PollView() {
 
   return (
     <div className="min-h-screen">
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5">
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6 sm:py-5">
         <Logo />
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           <span className="chip hidden border-cornflower-200 bg-cornflower-50 text-cornflower-700 sm:inline-flex">
             <Eye className="h-3 w-3" /> {poll.viewers} watching
           </span>
-          <button onClick={copyLink} className="btn-ghost !px-3 !py-2 text-xs" aria-label="Copy poll link">
-            <Link2 className="h-3.5 w-3.5" /> Copy link
+          <button onClick={copyLink} className="btn-ghost !px-2.5 !py-2 sm:!px-3 text-xs shrink-0 whitespace-nowrap" aria-label="Copy poll link">
+            <Link2 className="h-3.5 w-3.5" />
+            <span>Copy link</span>
           </button>
-          <button onClick={() => setShareOpen(true)} className="btn-primary !px-3 !py-2 text-xs" aria-label="Share poll">
-            <QrCode className="h-3.5 w-3.5" /> Share
+          <button onClick={() => setShareOpen(true)} className="btn-primary !px-2.5 !py-2 sm:!px-3 text-xs shrink-0 whitespace-nowrap" aria-label="Share poll">
+            <QrCode className="h-3.5 w-3.5" />
+            <span>Share</span>
           </button>
         </div>
       </header>
 
-      <main className="mx-auto grid max-w-6xl gap-6 px-6 pb-24 pt-4 lg:grid-cols-[1.2fr_1fr]">
+      <main className="mx-auto grid max-w-6xl gap-6 px-4 py-4 sm:px-6 pb-24 lg:grid-cols-[1.2fr_1fr]">
         <section className="animate-fade-up">
-          <div className="card p-7">
+          <div className="card p-5 sm:p-7">
             <div className="flex flex-wrap items-center gap-2.5">
               {connectionChip}
               {poll.expiresAt && !closed && (
@@ -340,7 +342,7 @@ export function PollView() {
         </section>
 
         <section className="flex flex-col gap-6 animate-fade-up" style={{ animationDelay: '80ms' }}>
-          <div className="card p-6" data-testid="results-card">
+          <div className="card p-5 sm:p-6" data-testid="results-card">
             <div className="mb-5 flex items-center justify-between">
               <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-ink-400">Live results</h2>
               <span className="text-sm text-ink-500">
@@ -371,7 +373,7 @@ export function PollView() {
             </div>
           </div>
 
-          <div className="card p-6">
+          <div className="card p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-ink-400">Coming in</h2>
               {!closed && (
@@ -405,7 +407,7 @@ export function PollView() {
           </div>
 
           {!closed && (
-            <div className="card flex items-center justify-between gap-4 p-5">
+            <div className="card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 p-5">
               <div className="flex items-center gap-2.5">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cornflower-200 bg-cornflower-100 text-cornflower-700">
                   <Share2 className="h-4 w-4" />
@@ -415,7 +417,7 @@ export function PollView() {
                   <p className="text-xs text-ink-400">Share the link or let people scan the QR code.</p>
                 </div>
               </div>
-              <button onClick={() => setShareOpen(true)} className="btn-ghost shrink-0 text-xs">
+              <button onClick={() => setShareOpen(true)} className="btn-ghost shrink-0 text-xs w-full sm:w-auto">
                 <QrCode className="h-3.5 w-3.5" /> Open
               </button>
             </div>

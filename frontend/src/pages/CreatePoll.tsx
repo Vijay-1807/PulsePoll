@@ -82,21 +82,21 @@ export function CreatePoll() {
 
   return (
     <div className="min-h-screen">
-      <header className="mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-5">
+      <header className="mx-auto flex w-full max-w-3xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
         <Logo to="/dashboard" />
-        <Link to="/dashboard" className="btn-ghost !py-2 text-sm">
+        <Link to="/dashboard" className="btn-ghost !py-2 text-sm shrink-0 whitespace-nowrap">
           <ArrowLeft className="h-4 w-4" /> Dashboard
         </Link>
       </header>
 
-      <main className="mx-auto max-w-3xl px-6 pb-24">
+      <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6 pb-24">
         <h1 className="heading text-2xl">Create a poll</h1>
         <p className="mt-1.5 text-sm text-ink-500">
           Write your question, add options, and share the link. Results update live for everyone watching.
         </p>
 
         <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-6">
-          <section className="card p-6">
+          <section className="card p-5 sm:p-6">
             <label className="label" htmlFor="question">
               Question
             </label>
@@ -126,7 +126,7 @@ export function CreatePoll() {
             </div>
           </section>
 
-          <section className="card p-6">
+          <section className="card p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between">
               <label className="label !mb-0">Options</label>
               <span className="font-mono text-xs text-ink-400">{options.length}/8</span>

@@ -56,3 +56,31 @@ export function wsUrl(path: string): string {
 export function shareUrl(slug: string): string {
   return `${window.location.origin}/p/${slug}`
 }
+
+export async function downloadPollCsv(pollId: string, slug: string): Promise<void> {
+  const token = localStorage.getItem('pp_token')
+  const headers: Record<string, string> = {}
+  if (token) headers['Authorization'] = `Bearer ${token}`
+
+  const url = `${API_BASE}/api/polls/${pollId}/export.csv`
+  const res = await fetch(url, { headers })
+
+  if (!res.ok) {
+    throw new ApiError(res.status, 'Could not export poll results')
+  }
+
+  const contentType = res.headers.get('content-type') || ''
+  if (contentType.includes('text/html')) {
+    throw new ApiError(500, 'Invalid server response: received HTML instead of CSV')
+  }
+
+  const blob = await res.blob()
+  const blobUrl = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = blobUrl
+  a.download = `pulsepoll-${slug}-results.csv`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(blobUrl)
+}

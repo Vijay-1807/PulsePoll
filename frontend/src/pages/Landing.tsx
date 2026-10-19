@@ -74,19 +74,19 @@ export function Landing() {
         <GradientBackground className="h-full w-full" />
       </div>
 
-      <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+      <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 py-4 sm:py-5">
         <Logo />
-        <nav className="flex items-center gap-3">
+        <nav className="flex items-center gap-2 sm:gap-3">
           {user ? (
-            <Link to="/dashboard" className="btn-primary">
+            <Link to="/dashboard" className="btn-primary !px-3 sm:!px-4 !py-2 text-sm shrink-0 whitespace-nowrap">
               Dashboard <ArrowRight className="h-4 w-4" />
             </Link>
           ) : (
             <>
-              <Link to="/login" className="btn-ghost">
+              <Link to="/login" className="btn-ghost !px-3 sm:!px-4 !py-2 text-sm shrink-0 whitespace-nowrap">
                 Log in
               </Link>
-              <Link to="/signup" className="btn-primary">
+              <Link to="/signup" className="btn-primary !px-3 sm:!px-4 !py-2 text-sm shrink-0 whitespace-nowrap">
                 Get started
               </Link>
             </>
@@ -94,12 +94,12 @@ export function Landing() {
         </nav>
       </header>
 
-      <main className="relative z-10 mx-auto grid max-w-6xl items-center gap-14 px-6 pb-20 pt-12 lg:grid-cols-2 lg:pt-20">
+      <main className="relative z-10 mx-auto grid max-w-6xl items-center gap-10 sm:gap-14 px-4 sm:px-6 pb-20 pt-8 sm:pt-12 lg:grid-cols-2 lg:pt-20">
         <div>
           <span className="chip mb-6 border-clay-200 bg-clay-100 text-clay-800">
             <Sparkles className="h-3 w-3" /> Live polling for rooms, events & teams
           </span>
-          <h1 className="heading text-balance text-[42px] leading-[1.06] sm:text-6xl">
+          <h1 className="heading text-balance text-3xl leading-[1.1] sm:text-5xl md:text-6xl">
             Ask the room.
             <br />
             Watch answers{' '}
